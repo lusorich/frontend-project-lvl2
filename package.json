@@ -4,7 +4,8 @@
   "description": "hexlet level 2 project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "lint": "eslint src/**/*.js src/*.js"
   },
   "type": "module",
   "repository": {
@@ -26,6 +27,19 @@
   },
   "homepage": "https://github.com/lusorich/frontend-project-lvl2#readme",
   "dependencies": {
-    "commander": "^9.2.0"
+    "commander": "^9.2.0",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.18.2",
+    "@babel/preset-env": "^7.18.2",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jest": "^26.4.2",
+    "jest": "^28.1.0",
+    "prettier": "2.6.2"
   }
 }
