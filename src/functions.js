@@ -63,7 +63,7 @@ const compare = (obj1, obj2) => {
     .reduce((acc, key) => {
       const isOnlyFirstObjectHasKey = hasKey(obj1, key) && !hasKey(obj2, key);
       const isOnlySecondObjectHasKey = !hasKey(obj1, key) && hasKey(obj2, key);
-      if (!_.isObject(mergedObj[key])) {
+      if (!_.isObject(obj1[key]) && !_.isObject(obj2[key])) {
         acc.push(iter(key, obj1[key], obj2[key]));
       } else if (isOnlyFirstObjectHasKey) {
         acc.push({
@@ -94,6 +94,7 @@ function readAndCompareFiles() {
   if (isFileExists(path1, path2)) {
     const [obj1, obj2] = buildTree(path1, path2);
     const heh = compare(obj1, obj2);
+    console.log("heh", heh[1].value[3]);
     return heh;
   }
   return {};
