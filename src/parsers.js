@@ -1,17 +1,23 @@
 import * as yamlParser from 'js-yaml';
 
-const parser = (file, ext) => {
+const parser = (ext) => {
   switch (ext) {
     case '.yaml':
     case '.yml': {
-      return yamlParser.load(file);
+      return {
+        parse: (file) => yamlParser.load(file),
+        type: 'yaml',
+      };
     }
     case '.json': {
-      return JSON.parse(file);
+      return {
+        parse: (file) => JSON.parse(file),
+        type: 'json',
+      };
     }
     default:
       return {};
   }
 };
 
-export { parser };
+export default parser;
