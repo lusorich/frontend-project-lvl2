@@ -80,7 +80,7 @@ describe('compare testing', () => {
     const valueFromObj2 = obj2.common.setting1;
     const isEqualThanEqualType = valueFromObj1 === valueFromObj2;
     const compareResult = compare(obj1, obj2);
-    const resultDiffTypeOfValue = compareResult[0].value[1].type;
+    const resultDiffTypeOfValue = compareResult.common.value.setting1.type;
 
     expect(isEqualThanEqualType).toBeTruthy();
     expect(resultDiffTypeOfValue).toEqual('equal');
@@ -90,7 +90,7 @@ describe('compare testing', () => {
     const isOnlyFirstObjectHasKey = hasKey(obj1.common, 'setting2')
       && !hasKey(obj2.common, 'setting2');
     const compareResult = compare(obj1, obj2);
-    const resultDiffTypeOfValue = compareResult[0].value[2].type;
+    const resultDiffTypeOfValue = compareResult.common.value.setting2.type;
 
     expect(isOnlyFirstObjectHasKey).toBeTruthy();
     expect(resultDiffTypeOfValue).toEqual('miss');
@@ -99,23 +99,21 @@ describe('compare testing', () => {
   test('returns type "add" if key contained in only second object', () => {
     const isOnlySecondObjectHasKey = !hasKey(obj1.common, 'setting4') && hasKey(obj2.common, 'setting4');
     const compareResult = compare(obj1, obj2);
-    const resultDiffTypeOfValue = compareResult[0].value[5].type;
+    const resultDiffTypeOfValue = compareResult.common.value.setting4.type;
 
     expect(isOnlySecondObjectHasKey).toBeTruthy();
     expect(resultDiffTypeOfValue).toEqual('add');
   });
 
-  test('returns type "add" and "miss" if key contained both object, but value not equal', () => {
+  test('returns type "diff", if key contained in both object but difference value', () => {
     const valueFromObj1 = obj1.common.setting3;
     const valueFromObj2 = obj2.common.setting3;
     const allObjectsHasKey = hasKey(obj1.common, 'setting3') && hasKey(obj1.common, 'setting3');
     const compareResult = compare(obj1, obj2);
-    const resultDiffTypeOfValue1 = compareResult[0].value[3].type;
-    const resultDiffTypeOfValue2 = compareResult[0].value[4].type;
+    const resultDiffTypeOfValue = compareResult.common.value.setting3.type;
 
     expect(allObjectsHasKey).toBeTruthy();
     expect(valueFromObj1).not.toEqual(valueFromObj2);
-    expect(resultDiffTypeOfValue1).toEqual('miss');
-    expect(resultDiffTypeOfValue2).toEqual('add');
+    expect(resultDiffTypeOfValue).toEqual('diff');
   });
 });
