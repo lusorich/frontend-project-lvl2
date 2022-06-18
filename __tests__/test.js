@@ -93,7 +93,7 @@ describe('compare testing', () => {
     const resultDiffTypeOfValue = compareResult.common.value.setting2.type;
 
     expect(isOnlyFirstObjectHasKey).toBeTruthy();
-    expect(resultDiffTypeOfValue).toEqual('miss');
+    expect(resultDiffTypeOfValue).toEqual('remove');
   });
 
   test('returns type "add" if key contained in only second object', () => {
@@ -114,6 +114,6 @@ describe('compare testing', () => {
 
     expect(allObjectsHasKey).toBeTruthy();
     expect(valueFromObj1).not.toEqual(valueFromObj2);
-    expect(resultDiffTypeOfValue).toEqual('diff');
+    expect(resultDiffTypeOfValue).toEqual('update');
   });
 });

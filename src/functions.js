@@ -24,7 +24,7 @@ const compare = (obj1, obj2) => {
     if (isOnlyFirstObjectHasKey) {
       return {
         ...acc,
-        [key]: getDiffObj('miss', obj1[key]),
+        [key]: getDiffObj('remove', obj1[key]),
       };
     }
     if (isOnlySecondObjectHasKey) {
@@ -49,7 +49,7 @@ const compare = (obj1, obj2) => {
       if (obj1[key] !== obj2[key]) {
         return {
           ...acc,
-          [key]: getDiffObj('diff', [obj1[key], obj2[key]]),
+          [key]: getDiffObj('update', [obj1[key], obj2[key]]),
         };
       }
     }

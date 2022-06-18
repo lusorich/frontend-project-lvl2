@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const spacesCount = 1;
 const replacer = '    ';
 
@@ -12,13 +14,13 @@ const getCurrentIndentsByType = (type, repeatCount) => {
           }+`
             + ' ',
         ];
-      case 'miss':
+      case 'remove':
         return [
           `${currentIndent.slice(0, currentIndent.length - countReplacedChar)
           }-`
             + ' ',
         ];
-      case 'diff': {
+      case 'update': {
         return [
           `${currentIndent.slice(0, currentIndent.length - countReplacedChar)
           }+`
@@ -37,7 +39,7 @@ const getCurrentIndentsByType = (type, repeatCount) => {
 
 const stylish = (obj) => {
   const iter = (currentValue, depth) => {
-    if (typeof currentValue !== 'object' || currentValue === null) {
+    if (!_.isObject(currentValue)) {
       return `${currentValue}`;
     }
 
