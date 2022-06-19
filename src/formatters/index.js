@@ -19,6 +19,6 @@ export default (formatter) => {
       };
     }
     default:
-      return '';
+      throw new Error('Formatter not allowed');
   }
 };
