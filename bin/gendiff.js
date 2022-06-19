@@ -15,4 +15,4 @@ program
     console.log(getDiff(path1, path2, formatter));
   });
 
-program.parse();
+program.parse(process.argv);
