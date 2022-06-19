@@ -25,11 +25,13 @@ const getCurrentIndentsByType = (type, repeatCount) => {
           `${currentIndent.slice(
             0,
             currentIndent.length - countReplacedChar,
-          )}-` + ' ',
+          )}-`
+            + ' ',
           `${currentIndent.slice(
             0,
             currentIndent.length - countReplacedChar,
-          )}+` + ' ',
+          )}+`
+            + ' ',
         ];
       }
       default:
