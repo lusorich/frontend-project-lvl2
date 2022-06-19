@@ -24,7 +24,7 @@ const plain = (tree) => {
       }
       if (item.type === 'update') {
         const [val1, val2] = item.value;
-        return `Property '${newPath}' was updated from ${getValueTxt(
+        return `Property '${newPath}' was updated. From ${getValueTxt(
           val1,
         )} to ${getValueTxt(val2)}`;
       }
