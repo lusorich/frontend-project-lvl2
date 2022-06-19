@@ -22,12 +22,14 @@ const getCurrentIndentsByType = (type, repeatCount) => {
         ];
       case 'update': {
         return [
-          `${currentIndent.slice(0, currentIndent.length - countReplacedChar)
-          }+`
-            + ' ',
-          `${currentIndent.slice(0, currentIndent.length - countReplacedChar)
-          }-`
-            + ' ',
+          `${currentIndent.slice(
+            0,
+            currentIndent.length - countReplacedChar,
+          )}-` + ' ',
+          `${currentIndent.slice(
+            0,
+            currentIndent.length - countReplacedChar,
+          )}+` + ' ',
         ];
       }
       default:
@@ -58,11 +60,14 @@ const stylish = (obj) => {
           depth + 1,
         )}\n${currentIndent2}${key}: ${iter(value2, depth + 1)}`;
       }
-      return `${currentIndent1}${key}: ${iter(
-        value || currentValue[key],
-        depth + 1,
-      )}`;
-    });
+      if (key !== 'type') {
+        return `${currentIndent1}${key}: ${iter(
+          value !== undefined ? value : currentValue[key],
+          depth + 1,
+        )}`;
+      }
+      return '';
+    }).filter(Boolean);
 
     return ['{', ...lines, `${bracketIndent}}`].join('\n');
   };

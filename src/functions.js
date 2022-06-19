@@ -2,6 +2,7 @@ import * as fs from 'node:fs';
 import _ from 'lodash';
 import buildTree from './builder.js';
 import { stylish } from './formatters/stylish.js';
+import { plain } from './formatters/plain.js';
 
 const hasKey = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key);
 const isFileExists = (...paths) => paths.filter((p) => fs.existsSync(p)).length === paths.length;
@@ -66,7 +67,16 @@ function readAndCompareFiles(path1, path2, formatter) {
         console.log(stylish(diffTree));
         return stylish(diffTree);
       }
-      default: return '';
+      case 'plain': {
+        console.log(plain(diffTree));
+        return plain(diffTree);
+      }
+      case 'json': {
+        console.log(JSON.stringify(diffTree));
+        return JSON.stringify(diffTree);
+      }
+      default:
+        return '';
     }
   }
   return {};

@@ -8,8 +8,9 @@ env:
   node: true
 
 extends:
-  - "airbnb-base"
-  - "plugin:jest/recommended"
+  - 'airbnb-base'
+  - 'plugin:jest/recommended'
+  - 'eslint:recommended'
 
 parserOptions:
   ecmaVersion: latest
@@ -20,4 +21,8 @@ rules:
     - error
     - ignorePackages
     - js: always
-  no-underscore-dangle: [2, { "allow": ["__filename", "__dirname"] }]
+  no-underscore-dangle: [2, { 'allow': ['__filename', '__dirname'] }]
+  consistent-return: 2
+  no-else-return: 1
+  semi: [1, 'always']
+  space-unary-ops: 2
