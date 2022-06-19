@@ -1,52 +1,83 @@
 import * as fs from 'node:fs';
 import _ from 'lodash';
+import buildTree from './builder.js';
+import { stylish } from './formatters/stylish.js';
+import { plain } from './formatters/plain.js';
 
 const hasKey = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key);
-
+const isFileExists = (...paths) => paths.filter((p) => fs.existsSync(p)).length === paths.length;
 const getSortedObjectKeysByAsc = (object) => _.sortBy(Object.keys(object));
 
-const compare = (file1, file2) => {
-  const mergedObject = { ...file1, ...file2 };
-  const keys = getSortedObjectKeysByAsc(mergedObject);
-  const res = keys
-    .reduce((acc, key) => {
-      const isBothObjectsHasKey = hasKey(file1, key) && hasKey(file2, key);
-      const isOnlyFirstObjectHasKey = !hasKey(file1, key) && hasKey(file2, key);
-      const isOnlySecondObjectHasKey = hasKey(file1, key) && !hasKey(file2, key);
-      if (isOnlySecondObjectHasKey) {
-        acc.push(`- ${key}: ${file1[key]}`);
+const getDiffObj = (type, value) => ({ type, value });
+
+const compare = (obj1, obj2) => {
+  const mergedObj = {
+    ...obj1,
+    ...obj2,
+  };
+  const keys = getSortedObjectKeysByAsc(mergedObj);
+
+  return keys.reduce((acc, key) => {
+    const isOnlyFirstObjectHasKey = hasKey(obj1, key) && !hasKey(obj2, key);
+    const isOnlySecondObjectHasKey = !hasKey(obj1, key) && hasKey(obj2, key);
+    const isBothObjectHasKey = hasKey(obj1, key) && hasKey(obj2, key);
+
+    if (isOnlyFirstObjectHasKey) {
+      return {
+        ...acc,
+        [key]: getDiffObj('remove', obj1[key]),
+      };
+    }
+    if (isOnlySecondObjectHasKey) {
+      return {
+        ...acc,
+        [key]: getDiffObj('add', obj2[key]),
+      };
+    }
+    if (isBothObjectHasKey) {
+      if (obj1[key] === obj2[key]) {
+        return {
+          ...acc,
+          [key]: getDiffObj('equal', obj1[key]),
+        };
       }
-      if (isOnlyFirstObjectHasKey) {
-        acc.push(`+ ${key}: ${file2[key]}`);
+      if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
+        return {
+          ...acc,
+          [key]: getDiffObj('equal', compare(obj1[key], obj2[key])),
+        };
       }
-      if (isBothObjectsHasKey) {
-        if (file1[key] === file2[key]) {
-          acc.push(`  ${key}: ${file1[key]}`);
-        }
-        if (file1[key] !== file2[key]) {
-          acc.push(`- ${key}: ${file1[key]}`);
-          acc.push(`+ ${key}: ${file2[key]}`);
-        }
+      if (obj1[key] !== obj2[key]) {
+        return {
+          ...acc,
+          [key]: getDiffObj('update', [obj1[key], obj2[key]]),
+        };
       }
-      return acc;
-    }, [])
-    .join('\n');
-  return `\n${res}`;
+    }
+    return acc;
+  }, {});
 };
 
-function readAndCompareFiles() {
-  const [path1, path2] = this.args;
-  if (
-    path1.endsWith('.json')
-    && path2.endsWith('.json')
-    && fs.existsSync(path1)
-    && fs.existsSync(path2)
-  ) {
-    const json1 = JSON.parse(fs.readFileSync(path1));
-    const json2 = JSON.parse(fs.readFileSync(path2));
-    const heh = compare(json1, json2);
-    console.log('heh', heh);
-    return heh;
+function readAndCompareFiles(path1, path2, formatter) {
+  if (isFileExists(path1, path2)) {
+    const [obj1, obj2] = buildTree(path1, path2);
+    const diffTree = compare(obj1, obj2);
+    switch (formatter) {
+      case 'stylish': {
+        console.log(stylish(diffTree));
+        return stylish(diffTree);
+      }
+      case 'plain': {
+        console.log(plain(diffTree));
+        return plain(diffTree);
+      }
+      case 'json': {
+        console.log(JSON.stringify(diffTree));
+        return JSON.stringify(diffTree);
+      }
+      default:
+        return '';
+    }
   }
   return {};
 }

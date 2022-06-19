@@ -8,8 +8,12 @@ export default () => {
     .version('0.0.1')
     .argument('<filepath1>')
     .argument('<filepath2>')
-    .option('-f, --format <type>', 'output format')
-    .action(readAndCompareFiles);
+    .option('-f, --format <type>', 'output format', 'stylish')
+    .action((...args) => {
+      const [path1, path2] = [args[0], args[1]];
+      const formatter = args[2].format;
+      return readAndCompareFiles(path1, path2, formatter);
+    });
 
   program.parse();
 };

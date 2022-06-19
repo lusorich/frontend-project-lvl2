@@ -4,7 +4,7 @@
   "description": "hexlet level 2 project",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
     "lint": "eslint src/**/*.js src/*.js"
   },
   "type": "module",
@@ -28,6 +28,7 @@
   "homepage": "https://github.com/lusorich/frontend-project-lvl2#readme",
   "dependencies": {
     "commander": "^9.2.0",
+    "js-yaml": "^4.1.0",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
