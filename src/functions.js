@@ -1,11 +1,6 @@
-import * as fs from 'node:fs';
 import _ from 'lodash';
-import buildTree from './builder.js';
-import { stylish } from './formatters/stylish.js';
-import { plain } from './formatters/plain.js';
 
 const hasKey = (obj, key) => Object.prototype.hasOwnProperty.call(obj, key);
-const isFileExists = (...paths) => paths.filter((p) => fs.existsSync(p)).length === paths.length;
 const getSortedObjectKeysByAsc = (object) => _.sortBy(Object.keys(object));
 
 const getDiffObj = (type, value) => ({ type, value });
@@ -58,28 +53,4 @@ const compare = (obj1, obj2) => {
   }, {});
 };
 
-function readAndCompareFiles(path1, path2, formatter) {
-  if (isFileExists(path1, path2)) {
-    const [obj1, obj2] = buildTree(path1, path2);
-    const diffTree = compare(obj1, obj2);
-    switch (formatter) {
-      case 'stylish': {
-        console.log(stylish(diffTree));
-        return stylish(diffTree);
-      }
-      case 'plain': {
-        console.log(plain(diffTree));
-        return plain(diffTree);
-      }
-      case 'json': {
-        console.log(JSON.stringify(diffTree));
-        return JSON.stringify(diffTree);
-      }
-      default:
-        return '';
-    }
-  }
-  return {};
-}
-
-export { hasKey, readAndCompareFiles, compare };
+export { hasKey, compare };
