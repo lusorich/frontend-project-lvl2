@@ -1,12 +1,12 @@
-import * as fs from 'node:fs';
-import * as path from 'node:path';
+import { readFileSync } from 'fs';
+import { extname } from 'path';
 import parser from './parsers.js';
 
 export default (path1, path2) => {
-  const file1 = fs.readFileSync(path1);
-  const file2 = fs.readFileSync(path2);
+  const file1 = readFileSync(path1);
+  const file2 = readFileSync(path2);
   return [
-    parser(path.extname(path1)).parse(file1),
-    parser(path.extname(path2)).parse(file2),
+    parser(extname(path1)).parse(file1),
+    parser(extname(path2)).parse(file2),
   ];
 };
