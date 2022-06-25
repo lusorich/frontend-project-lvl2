@@ -1,9 +1,9 @@
-import * as fs from 'node:fs';
+import { existsSync } from 'fs';
 import buildTree from './builder.js';
 import formatters from './formatters/index.js';
 import { compare } from './functions.js';
 
-const isFileExists = (...paths) => paths.filter((p) => fs.existsSync(p)).length === paths.length;
+const isFileExists = (...paths) => paths.filter((p) => existsSync(p)).length === paths.length;
 
 export default (path1, path2, formatter = 'stylish') => {
   if (isFileExists(path1, path2)) {

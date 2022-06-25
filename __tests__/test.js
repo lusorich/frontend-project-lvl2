@@ -1,7 +1,7 @@
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import * as fs from 'node:fs';
-import * as path from 'node:path';
+import * as fs from 'fs';
+import * as path from 'path';
 import * as yamlParser from 'js-yaml';
 import { hasKey, compare } from '../src/functions.js';
 import buildTree from '../src/builder.js';
