@@ -3,7 +3,7 @@ import buildTree from './builder.js';
 import formatters from './formatters/index.js';
 import { compare } from './functions.js';
 
-const isFileExists = (...paths) => paths.filter((p) => existsSync(p)).length === paths.length;
+const isFileExists = (path1, path2) => existsSync(path1) && existsSync(path2);
 
 export default (path1, path2, formatter = 'stylish') => {
   if (isFileExists(path1, path2)) {
