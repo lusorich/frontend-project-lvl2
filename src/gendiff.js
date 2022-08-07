@@ -1,19 +1,16 @@
-import { program } from 'commander';
-import { readAndCompareFiles } from './functions.js';
+import { existsSync } from 'fs';
+import buildTree from './builder.js';
+import formatters from './formatters/index.js';
+import { getDiff } from './functions.js';
 
-export default () => {
-  program
-    .name('gendiff')
-    .description('Compares two configuration files and shows a difference.')
-    .version('0.0.1')
-    .argument('<filepath1>')
-    .argument('<filepath2>')
-    .option('-f, --format <type>', 'output format', 'stylish')
-    .action((...args) => {
-      const [path1, path2] = [args[0], args[1]];
-      const formatter = args[2].format;
-      return readAndCompareFiles(path1, path2, formatter);
-    });
+const isFileExists = (path1, path2) => existsSync(path1) && existsSync(path2);
 
-  program.parse();
+export default (path1, path2, formatter = 'stylish') => {
+  if (isFileExists(path1, path2)) {
+    const [tree1, tree2] = buildTree(path1, path2);
+    const diffTree = getDiff(tree1, tree2);
+    const result = formatters(formatter).format(diffTree);
+    return result;
+  }
+  return {};
 };
