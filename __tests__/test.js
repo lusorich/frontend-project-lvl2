@@ -3,7 +3,7 @@ import { dirname } from 'path';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as yamlParser from 'js-yaml';
-import { hasKey, compare } from '../src/functions.js';
+import { hasKey, getDiff } from '../src/functions.js';
 import buildTree from '../src/builder.js';
 import parser from '../src/parsers.js';
 
@@ -70,16 +70,16 @@ describe('build tree testing', () => {
   });
 });
 
-describe('compare testing', () => {
+describe('getDiff testing', () => {
   const path1 = getFixturePath('file1.json');
   const path2 = getFixturePath('file2.json');
   const [obj1, obj2] = buildTree(path1, path2);
+  const compareResult = getDiff(obj1, obj2);
 
   test('returns the type "equal" if the primitives are equal', () => {
     const valueFromObj1 = obj1.common.setting1;
     const valueFromObj2 = obj2.common.setting1;
     const isEqualThanEqualType = valueFromObj1 === valueFromObj2;
-    const compareResult = compare(obj1, obj2);
     const resultDiffTypeOfValue = compareResult.common.value.setting1.type;
 
     expect(isEqualThanEqualType).toBeTruthy();
@@ -89,7 +89,6 @@ describe('compare testing', () => {
   test('returns type "miss" if key contained in only first object', () => {
     const isOnlyFirstObjectHasKey = hasKey(obj1.common, 'setting2')
       && !hasKey(obj2.common, 'setting2');
-    const compareResult = compare(obj1, obj2);
     const resultDiffTypeOfValue = compareResult.common.value.setting2.type;
 
     expect(isOnlyFirstObjectHasKey).toBeTruthy();
@@ -98,7 +97,6 @@ describe('compare testing', () => {
 
   test('returns type "add" if key contained in only second object', () => {
     const isOnlySecondObjectHasKey = !hasKey(obj1.common, 'setting4') && hasKey(obj2.common, 'setting4');
-    const compareResult = compare(obj1, obj2);
     const resultDiffTypeOfValue = compareResult.common.value.setting4.type;
 
     expect(isOnlySecondObjectHasKey).toBeTruthy();
@@ -109,7 +107,6 @@ describe('compare testing', () => {
     const valueFromObj1 = obj1.common.setting3;
     const valueFromObj2 = obj2.common.setting3;
     const allObjectsHasKey = hasKey(obj1.common, 'setting3') && hasKey(obj1.common, 'setting3');
-    const compareResult = compare(obj1, obj2);
     const resultDiffTypeOfValue = compareResult.common.value.setting3.type;
 
     expect(allObjectsHasKey).toBeTruthy();

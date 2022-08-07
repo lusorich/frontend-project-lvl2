@@ -23,10 +23,10 @@ const plain = (tree) => {
         return `Property '${newPath}' was removed`;
       }
       if (item.type === 'update') {
-        const [val1, val2] = item.value;
+        const [oldValue, newValue] = item.value;
         return `Property '${newPath}' was updated. From ${getValueTxt(
-          val1,
-        )} to ${getValueTxt(val2)}`;
+          oldValue,
+        )} to ${getValueTxt(newValue)}`;
       }
     }
     if (item && item.value && typeof _.isObject(item.value)) {

@@ -5,7 +5,7 @@ const getSortedObjectKeysByAsc = (object) => _.sortBy(Object.keys(object));
 
 const getDiffObj = (type, value) => ({ type, value });
 
-const compare = (obj1, obj2) => {
+const getDiff = (obj1, obj2) => {
   const mergedObj = {
     ...obj1,
     ...obj2,
@@ -39,7 +39,7 @@ const compare = (obj1, obj2) => {
       if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
         return {
           ...acc,
-          [key]: getDiffObj('equal', compare(obj1[key], obj2[key])),
+          [key]: getDiffObj('equal', getDiff(obj1[key], obj2[key])),
         };
       }
       if (obj1[key] !== obj2[key]) {
@@ -53,4 +53,4 @@ const compare = (obj1, obj2) => {
   }, {});
 };
 
-export { hasKey, compare };
+export { hasKey, getDiff };
